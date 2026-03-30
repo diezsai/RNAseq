@@ -57,9 +57,6 @@ echo "Using container: $CONTAINER"
 # -----------------------
 ALIGN_BASE="${PROJ_PATH}/02_alignment/${REF_NAME}"
 
-mkdir -p "${ALIGN_BASE}/bam"
-mkdir -p "${ALIGN_BASE}/star_logs"
-
 # -----------------------
 # FASTQ collection (single-end)
 # -----------------------
@@ -100,18 +97,12 @@ apptainer exec \
     --genomeDir "$STAR_INDEX" \
     --readFilesIn "$INPUT_FASTQ" \
     --runThreadN "$SLURM_CPUS_PER_TASK" \
-    --outFileNamePrefix "${ALIGN_BASE}/star_logs/${EXP_NAME}." \
+    --outFileNamePrefix "${ALIGN_BASE}/${EXP_NAME}." \
     --outSAMtype BAM SortedByCoordinate \
     --outFilterMultimapNmax 5 \
     --outFilterMismatchNoverLmax 0.04 \
     --alignIntronMax 10000 \
     --quantMode GeneCounts
-
-# -----------------------
-# Move BAM to clean location
-# -----------------------
-mv "${ALIGN_BASE}/star_logs/*.bam" \
-   "${ALIGN_BASE}/bam"
 
 echo "========================================"
 echo "Finished sample: $EXP_NAME"
